@@ -17,7 +17,6 @@ MainWindow::MainWindow(QWidget *parent)
         ui->chooseItemBox->addItem(QString::number(i));
     }
 
-    connect(ui->pushButton, &QPushButton::clicked, this, &MainWindow::on_pushButton_clicked);
 
 }
 
