@@ -4,19 +4,36 @@
 #include <QObject>
 #include <QTimer>
 
+class Stopwatch : public QObject {
+    Q_OBJECT
 
- // В классе обязательно должны быть реализованы методы запуска, остановки, сброса секундомера.
- // у меня тут метода запуска остаоновки сброса и геттер времени секундомера
-
-class Stopwatch
-{
 public:
-    Stopwatch();
-    ~Stopwatch();
+    explicit Stopwatch(QObject *parent = nullptr);
     void start();
     void stop();
-    auto time_getter();
-    void end();
+    void reset();
+    void recordLap();
+
+    QString getElapsedTime() const;
+    QString getLapTime() const;
+    bool get_running_state() const;
+
+signals:
+    void timeUpdated(const QString &time); // Сигнал для обновления времени
+    void lapRecorded(const QString &lap); // Сигнал для добавления круга
+
+
+private slots:
+    void updateTimer();
+
+
+private:
+    QTimer timer;
+    qint64 startTime;       // Время запуска
+    qint64 elapsedTime;     // Общее прошедшее время
+    qint64 lastLapTime;     // Время последнего круга
+    int lapCount;           // Количество кругов
+    bool isRunning = false;
 
 };
 
