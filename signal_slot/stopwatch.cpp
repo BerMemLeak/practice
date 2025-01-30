@@ -29,17 +29,19 @@ void Stopwatch::reset() {
     lastLapTime = 0;
     lapCount = 0;
     emit timeUpdated("0.0");
-    timer.start();
+    emit resetting();
+    isRunning = false;
+
 
 }
 
-void Stopwatch::recordLap() {
+QString Stopwatch::recordLap() {
     qint64 currentTime = elapsedTime;
     qint64 lapTime = currentTime - lastLapTime;  // Время прошедшее с последнего круга
     lastLapTime = currentTime;  // Обновляем время последнего круга
 
     lapCount++;  // Увеличиваем счетчик кругов
-    emit lapRecorded(QString("Круг %1, время: %2 сек").arg(lapCount).arg(lapTime / 10.0, 0, 'f', 1));  // Отправляем сигнал
+    return (QString("Круг %1, время: %2 сек").arg(lapCount).arg(lapTime / 10.0, 0, 'f', 1));  // Отправляем сигнал
 }
 
 

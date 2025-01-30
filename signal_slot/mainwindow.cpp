@@ -17,14 +17,21 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Подключение сигналов и слотов
     connect(stopwatch, &Stopwatch::timeUpdated, ui->timeLabel, &QLabel::setText);
-    connect(stopwatch, &Stopwatch::lapRecorded, ui->circleInfo, &QTextBrowser::append);
 
+    // connect(stopwatch, &Stopwatch::lapRecorded, ui->circleInfo, &QTextBrowser::append);
+    connect(ui->circle, &QPushButton::clicked, this , [this](){
+        ui->circleInfo->append(stopwatch->recordLap());
+    });
     connect(ui->start_stop, &QPushButton::clicked, this, &MainWindow::onStartStopClicked);
     connect(ui->restart, &QPushButton::clicked, [this]() {
         stopwatch->reset();
         ui->circleInfo->clear();
     });
-    connect(ui->circle, &QPushButton::clicked, stopwatch, &Stopwatch::recordLap);
+    connect(stopwatch, &Stopwatch::resetting, this, [this]() {
+        ui->start_stop->setText("Старт");
+    });
+
+
 }
 
 MainWindow::~MainWindow() {

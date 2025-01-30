@@ -12,7 +12,7 @@ public:
     void start();
     void stop();
     void reset();
-    void recordLap();
+    QString recordLap();
 
     QString getElapsedTime() const;
     QString getLapTime() const;
@@ -20,7 +20,7 @@ public:
 
 signals:
     void timeUpdated(const QString &time); // Сигнал для обновления времени
-    void lapRecorded(const QString &lap); // Сигнал для добавления круга
+    void resetting();
 
 
 private slots:
