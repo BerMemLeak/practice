@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->restart->setText("Сбросить");
     ui->start_stop->setText("Старт");
     ui->circle->setText("Круг");
+    ui->circle->setEnabled(false);
 
 
     // Подключение сигналов и слотов
@@ -26,9 +27,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->restart, &QPushButton::clicked, [this]() {
         stopwatch->reset();
         ui->circleInfo->clear();
-    });
-    connect(stopwatch, &Stopwatch::resetting, this, [this]() {
-        ui->start_stop->setText("Старт");
     });
 
 

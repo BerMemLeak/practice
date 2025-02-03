@@ -30,7 +30,7 @@ void Stopwatch::reset() {
     lapCount = 0;
     emit timeUpdated("0.0");
     emit resetting();
-    isRunning = false;
+    timer.start();
 
 
 }
