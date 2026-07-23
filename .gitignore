@@ -7,3 +7,4 @@ Catch2-devel
 .name
 .idea/
 *.user
+*.user*
