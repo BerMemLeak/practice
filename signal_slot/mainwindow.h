@@ -8,7 +8,7 @@ namespace Ui {
 class MainWindow;
 }
 
-// тут вся логика кроме плдсчета времени и коннекторы
+// тут вся логика кроме подсчета времени и коннекторы
 
 class MainWindow : public QMainWindow
 {
