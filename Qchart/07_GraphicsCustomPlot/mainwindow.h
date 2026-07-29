@@ -2,9 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QDebug>
-#include <QtConcurrent>
-#include "ExampleRace.h"
+#include "qcustomplot.h"
+#include "graphic.h"
+
+#define NUM_GRAPH 2
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,24 +18,17 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void StartRace( void );
-
 
 private slots:
-
-    void on_pb_start_clicked();
+    void on_pb_clear_clicked();
+    void on_pb_updGraph_clicked();
 
 private:
     Ui::MainWindow *ui;
-    uint32_t number = 0, countFinish = 0;
+    QCPGraph* graphic;
+    Graphic* graphClass;
 
-    QMutex m;
-    Controller *race1;
-    Controller *race2;
-
-    ExampleRace *concurRace1;
-    ExampleRace *concurRace2;
+    QVector<double> ConstructMouse(int numForm, QVector<double> x);
 
 };
-
 #endif // MAINWINDOW_H

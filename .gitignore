@@ -8,3 +8,4 @@ Catch2-devel
 .idea/
 *.user
 *.user*
+*.adc*
