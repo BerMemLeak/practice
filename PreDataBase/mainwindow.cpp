@@ -35,10 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
         dataForConnect = receivData;
     });
 
-    /*
-     * Соединяем сигнал, который передает ответ от БД с методом, который отображает ответ в ПИ
-     */
-     connect(dataBase, &DataBase::sig_SendDataFromDB, this, &MainWindow::ScreenDataFromDB);
+
 
     /*
      *  Сигнал для подключения к БД
@@ -99,11 +96,9 @@ void MainWindow::on_act_connect_triggered()
  */
 void MainWindow::on_pb_request_clicked()
 {
-    // 1. Получаем соединение и текст из ComboBox
     QSqlDatabase db = QSqlDatabase::database(DB_NAME);
     QString filterText = ui->cb_category->currentText();
 
-    // ДИАГНОСТИКА: смотрим, что реально выбрано в списке
     qDebug() << "=== НАЖАТА КНОПКА ПОЛУЧИТЬ ===";
     qDebug() << "Выбран фильтр:" << filterText;
 
@@ -115,48 +110,36 @@ void MainWindow::on_pb_request_clicked()
             qDebug() << "Ошибка SELECT:" << model->lastError().text();
             return;
         }
-
-        // Сначала устанавливаем модель
+//вот тут хз хз , по идее сначала надо скрыть, а потом отображать
         ui->tb_result->setModel(model);
 
-        // Потом скрываем столбцы
         for (int i = 0; i < model->columnCount(); ++i) {
             if (i != 1 && i != 2) {
                 ui->tb_result->setColumnHidden(i, true);
             }
         }
 
-        // Задаем заголовки
         model->setHeaderData(1, Qt::Horizontal, "Название фильма");
         model->setHeaderData(2, Qt::Horizontal, "Описание фильма");
 
         qDebug() << "Загружено фильмов (Все):" << model->rowCount();
     }
-    // 3. Ветка для жанров (QSqlQueryModel)
     else {
         QString queryStr;
-        if (filterText == "Комедия") {
-            queryStr = "SELECT title, description FROM film f "
-                       "JOIN film_category fc on f.film_id = fc.film_id "
-                       "JOIN category c on c.category_id = fc.category_id "
-                       "WHERE c.name = 'Comedy'";
-        }
-        else if (filterText == "Ужасы") {
-            queryStr = "SELECT title, description FROM film f "
-                       "JOIN film_category fc on f.film_id = fc.film_id "
-                       "JOIN category c on c.category_id = fc.category_id "
-                       "WHERE c.name = 'Horror'";
-        }
+        queryStr = "SELECT title, description FROM film f "
+                   "JOIN film_category fc on f.film_id = fc.film_id "
+                   "JOIN category c on c.category_id = fc.category_id "
+                   "WHERE c.name = ";
+        if (filterText == "Комедия") {queryStr  +="'Comedy'";}
+        else if (filterText == "Ужасы") {queryStr += "'Horror'";}
 
         QSqlQueryModel *queryModel = new QSqlQueryModel(this);
         queryModel->setQuery(queryStr, db);
 
-        // ДИАГНОСТИКА: проверяем ошибку и количество строк
         if (queryModel->lastError().isValid()) {
             qDebug() << "ОШИБКА SQL ЗАПРОСА:" << queryModel->lastError().text();
             return;
         }
-        qDebug() << "Загружено фильмов (Жанр):" << queryModel->rowCount();
 
         queryModel->setHeaderData(0, Qt::Horizontal, "Название фильма");
         queryModel->setHeaderData(1, Qt::Horizontal, "Описание фильма");
@@ -169,13 +152,7 @@ void MainWindow::on_pb_request_clicked()
  * \param widget
  * \param typeRequest
  */
-void MainWindow::ScreenDataFromDB(const QTableWidget *widget, int typeRequest)
-{
 
-    ///Тут должен быть код ДЗ
-
-
-}
 /*!
  * \brief Метод изменяет стотояние формы в зависимости от статуса подключения к БД
  * \param status
