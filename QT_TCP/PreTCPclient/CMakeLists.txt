@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(PreUDPsocket VERSION 0.1 LANGUAGES CXX)
+project(10_TCPclient VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -20,20 +20,20 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
-        udpworker.h
-        udpworker.cpp
+        tcpclient.h
+        tcpclient.cpp
+        structs.h
 )
 
 
-qt_add_executable(PreUDPsocket
+qt_add_executable(10_TCPclient
     MANUAL_FINALIZATION
     ${PROJECT_SOURCES}
 )
 
 
-target_link_libraries(PreUDPsocket PRIVATE Qt6::Widgets Qt::Network)
+target_link_libraries(10_TCPclient PRIVATE Qt6::Widgets
+                                           Qt6::Network)
 
-
-
-qt_finalize_executable(PreUDPsocket)
+qt_finalize_executable(10_TCPclient)
 

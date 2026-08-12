@@ -21,8 +21,10 @@ public:
 
 private slots:
     void on_pb_start_clicked();
-    void DisplayTime(QString sender, int size);
+    void DisplayTime(QDateTime data);
     void on_pb_stop_clicked();
+
+    void on_pushDatagram_clicked();
 
 private:
     Ui::MainWindow *ui;

@@ -19,12 +19,7 @@ void UDPworker::InitSocket()
      * Соединяем присваиваем адрес и порт серверу и соединяем функцию
      * обраотчик принятых пакетов с сокетом
      */
-    if (!serviceUdpSocket->bind(QHostAddress::LocalHost, BIND_PORT)) {
-        qCritical() << "Не удалось занять порт:"
-                    << serviceUdpSocket->errorString();
-        return;
-    }
-    //serviceUdpSocket->bind(QHostAddress::LocalHost, BIND_PORT);
+    serviceUdpSocket->bind(QHostAddress::LocalHost, BIND_PORT);
 
     connect(serviceUdpSocket, &QUdpSocket::readyRead, this, &UDPworker::readPendingDatagrams);
 
@@ -35,8 +30,7 @@ void UDPworker::InitSocket()
  */
 void UDPworker::ReadDatagram(QNetworkDatagram datagram)
 {
-    QString sender = datagram.senderAddress().toString();
-    int size = datagram.data().size();
+
     QByteArray data;
     data = datagram.data();
 
@@ -45,11 +39,10 @@ void UDPworker::ReadDatagram(QNetworkDatagram datagram)
     QDateTime dateTime;
     inStr >> dateTime;
 
-    emit sig_sendToGUI( sender, size);
-
+    emit sig_sendTimeToGUI(dateTime);
 }
 /*!
- * @brief Метод осуществляет передачу датаграммы
+ * @brief Метод осуществляет опередачу датаграммы
  */
 void UDPworker::SendDatagram(QByteArray data)
 {
