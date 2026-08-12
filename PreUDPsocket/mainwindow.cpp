@@ -9,8 +9,18 @@ MainWindow::MainWindow(QWidget *parent)
 
     udpWorker = new UDPworker(this);
     udpWorker->InitSocket();
+    udpWorker->InitReplySocket();
+
 
     connect(udpWorker, &UDPworker::sig_sendTimeToGUI, this, &MainWindow::DisplayTime);
+
+    connect(udpWorker, &UDPworker::sig_sendReplyToGUI, this,
+            [this](const QString &sender, int size) {
+                ui->te_result->append(
+                    "Принято сообщение от " + sender +
+                    ", размер сообщения(байт) " + QString::number(size)
+                    );
+            });
 
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, [&]{
@@ -63,6 +73,6 @@ void MainWindow::on_pushDatagram_clicked()
 {
     auto text = ui->writeDatagram->text();
     if(text.isEmpty()){return;}
-    udpWorker->SendDatagram(text.toUtf8());
+    udpWorker->SendUserMessage(text.toUtf8());
 }
 

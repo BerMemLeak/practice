@@ -20,9 +20,29 @@ void UDPworker::InitSocket()
      * обраотчик принятых пакетов с сокетом
      */
     serviceUdpSocket->bind(QHostAddress::LocalHost, BIND_PORT);
-
     connect(serviceUdpSocket, &QUdpSocket::readyRead, this, &UDPworker::readPendingDatagrams);
 
+}
+
+void UDPworker::InitReplySocket()
+{
+    // Сокет для ответа — новый
+    recieveUdpSocket = new QUdpSocket(this);
+    recieveUdpSocket->bind(QHostAddress::LocalHost, 0);
+    connect(recieveUdpSocket, &QUdpSocket::readyRead,
+            this, &UDPworker::onReplyReceived);
+}
+
+void UDPworker::onReplyReceived()
+{
+    while (recieveUdpSocket->hasPendingDatagrams()) {
+        QNetworkDatagram datagram = recieveUdpSocket->receiveDatagram();
+
+        QString sender = datagram.senderAddress().toString();
+        int size = datagram.data().size();
+
+        emit sig_sendReplyToGUI(sender, size);
+    }
 }
 
 /*!
@@ -50,6 +70,16 @@ void UDPworker::SendDatagram(QByteArray data)
      *  Отправляем данные на localhost и задефайненный порт
      */
     serviceUdpSocket->writeDatagram(data, QHostAddress::LocalHost, BIND_PORT);
+}
+
+
+void UDPworker::SendUserMessage(const QByteArray &data)
+{
+    recieveUdpSocket->writeDatagram(
+        data,
+        QHostAddress::LocalHost,
+        recieveUdpSocket->localPort()
+        );
 }
 
 /*!

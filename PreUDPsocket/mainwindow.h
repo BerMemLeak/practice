@@ -23,7 +23,6 @@ private slots:
     void on_pb_start_clicked();
     void DisplayTime(QDateTime data);
     void on_pb_stop_clicked();
-
     void on_pushDatagram_clicked();
 
 private:
